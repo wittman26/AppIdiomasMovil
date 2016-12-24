@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">AppIdiomas</string>
+    <!--id app facebook-->
+    <string name="idAppFacebook">1277266832330917</string>
+
+    <!--lbl-->
+    <string name="lblTituloMain">APLICACION IDIOMAS</string>
+    <string name="lblTituloHome">BIENVENIDO</string>
+    <string name="lblIngresar">Ingrese</string>
+
+    <!--btn-->
+    <string name="btnIniciarSesion">Iniciar Sesión</string>
+    <string name="btnFacebook">Iniciar Sesión con Facebook</string>
+
+</resources>
