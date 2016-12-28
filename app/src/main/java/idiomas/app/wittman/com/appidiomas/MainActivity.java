@@ -1,8 +1,8 @@
 package idiomas.app.wittman.com.appidiomas;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -15,7 +15,6 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult login_result) {
-                Intent home = new Intent(MainActivity.this,HomePage.class);
+
+                obtenerInfoUsu(login_result);
 
                 datos_sesion =
                                 "User ID: "
@@ -63,33 +63,6 @@ public class MainActivity extends AppCompatActivity {
 //                                + "\n" +
 //                                "Auth Token: "
 //                                + login_result.getAccessToken().getToken();
-
-                GraphRequest request = GraphRequest.newMeRequest(
-                        login_result.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONObject object,
-                                    GraphResponse response) {
-                                // Application code
-                                try {
-                                    datos_sesion = datos_sesion + "\n" +
-                                            "Nombre: "
-                                            + object.getString("name").toString();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,link");
-                request.setParameters(parameters);
-                request.executeAsync();
-
-
-                home.putExtra("datos_sesion", datos_sesion);
-
-                startActivity(home);
 
             }
             @Override
@@ -103,6 +76,26 @@ public class MainActivity extends AppCompatActivity {
                 lblIngresar.setText("Login attempt failed.");
             }
         });
+    }
+
+    protected void obtenerInfoUsu(LoginResult loginResul){
+        GraphRequest data_request = GraphRequest.newMeRequest(
+                loginResul.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject json_object,
+                            GraphResponse response) {
+                        //Application code
+                        Intent home = new Intent(MainActivity.this,HomePage.class);
+                        home.putExtra("jsondata",json_object.toString());
+                        startActivity(home);
+                    }
+                });
+        Bundle paramePermiso = new Bundle();
+        paramePermiso.putString("fields", "id,name,email,picture.width(120).height(120)");
+        data_request.setParameters(paramePermiso);
+        data_request.executeAsync();
     }
 
 //    @Override
